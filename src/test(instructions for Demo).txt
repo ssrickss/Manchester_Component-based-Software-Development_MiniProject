@@ -1,0 +1,51 @@
+/*Create an atomic component*/
+CREATE CLASS CN:Elevator
+UPDATE CLASS CN:Elevator START
+ADD ATTR TYPE:SHORT AN:volume MOD:PRIVATE
+ADD ATTR TYPE:INT AN:ID MOD:PRIVATE
+ADD METH MN:addAge PARA:INT,preAge;DOUBLE,postAge RET:VOID
+ADD METH MN:modifyId PARA:INT,ID;DOUBLE,postAge RET:INT
+ADD METH MN:receiveRequest PARA:VOID,dataflow RET:VOID
+
+
+/*Create another atomic component*/
+CREATE CLASS CN:ElevatorScheduler
+UPDATE CLASS CN:ElevatorScheduler START
+ADD ATTR TYPE:INT AN:ID MOD:PRIVATE
+ADD ATTR TYPE:ARRAY AN:RequestQueue MOD:PRIVATE
+ADD ATTR TYPE:SHORT AN:schedulingStrategy MOD:PRIVATE
+ADD METH MN:FCFS_Strategy RET:INT
+ADD METH MN:SSTF_Strategy RET:INT
+ADD METH MN:SCAN_Strategy RET:INT
+
+CREATE CLASS CN:InputHandler
+UPDATE CLASS CN:InputHandler START
+ADD ATTR TYPE:ARRAY AN:REQUEST MOD:PRIVATE
+ADD METH MN:receiveRequest RET
+ADD METH MN:drawRequest RET
+
+finished design atomic component
+//DEL ATTR AN:age
+
+/*During Compose two atomic components to form a composite component*/
+COMPOSE CONNECTOR:Connector_Elevator_ElevatorScheduler TYPE:SEQ COMPONENT:Elevator,ElevatorScheduler
+finished composition
+
+
+COMPOSE CONNECTOR:Connector_ConnectorEE_InputHandler TYPE:SEQ COMPONENT:InputHandler,Connector_Elevator_ElevatorScheduler
+COMPOSE CONNECTOR:Connector_ConnectorEE_Elevator TYPE:SEL COMPONENT:Connector_Elevator_ElevatorScheduler,Elevator
+finished deployment
+
+-------------------------------------------------------------------------
+1.design component through command line with above instructions
+2.compose atomic components
+3.form a system
+
+
+CREATE CLASS CN:ATM
+UPDATE CLASS CN:ATM START
+ADD ATTR TYPE:SHORT AN:AGE MOD:PUBLIC
+ADD ATTR TYPE:INT AN:atmID MOD:PRIVATE
+ADD METH MN:provideCash PARA:INT,accountNumber RET:VOID
+
+
